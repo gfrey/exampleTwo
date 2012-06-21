@@ -47,6 +47,11 @@
                   :salt salt
                   :password salted_hash}))))
 
+(defn remove-user
+  "Remove the given user."
+  [username]
+  (db/delete "user" username))
+
 (defn valid?
   "Verify that the given user's password matches."
   [username pwd]
