@@ -27,4 +27,5 @@
 (defn delete
   "Delete the document with the given id."
   [type id]
-  (db/db-dissoc-in @db [type id]))
+  (db/db-dissoc-in @db [type] id))
+
