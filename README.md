@@ -9,7 +9,9 @@ lein deps
 lein run
 ```
 
-See [Leiningen](https://github.com/technomancy/leiningen) for the build tool.
+See [Leiningen](https://github.com/technomancy/leiningen) for the
+build tool. Go to the [welcome page](http://localhost:8080/welcome) after the ```lein
+run``` part.
 
 ## Description
 
