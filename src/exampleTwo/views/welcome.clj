@@ -9,8 +9,12 @@
         [hiccup.core :only [html]]))
 
 (defpage "/welcome" []
-         (common/layout
-           [:p "Welcome to exampleTwo"]))
+  (let [user (session/get :user)]
+    (common/layout
+     [:h1 (str "Welcome to exampleTwo "
+              (when (not (nil? user))
+                (:name user)))])))
+
 (defpage [:get "/register"] []
   (common/layout
    [:h1 "Register User"]
