@@ -26,3 +26,24 @@
   (user/add-user username password)
   (resp/redirect "/register"))
 
+(defpage [:get "/login"] []
+  (common/layout
+   [:h1 "Login"]
+   (form/form-to [:put "/login"]
+                 (form/text-field "username")
+                 (form/password-field "password")
+                 (form/submit-button "Login"))))
+
+(defpage [:get "/logout"] []
+  (if-let [user (session/get :user)]
+    (do
+      (session/remove! :user)
+      (common/layout
+       [:p (str "Bye " (:name user))]))
+    (resp/redirect "/welcome")))
+
+(defpage [:put "/login"] {:keys [username password]}
+  (when-let [user (user/valid? username password)]
+    (session/put! :user user))
+  (resp/redirect "/welcome"))
+
