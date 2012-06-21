@@ -39,9 +39,10 @@
   (user/remove-user id)
   (render "/register" {:msg (format "Deleted user %s" id)}))
 
-(defpage [:get "/login"] {:keys [username password]}
+(defpage [:get "/login"] {:keys [msg username password]}
   (common/layout
    [:h1 "Login"]
+   [:p (when (not (nil? msg)) msg)]
    (form/form-to [:put "/login"]
                  (form/text-field "username" username)
                  (form/password-field "password" password)
@@ -60,6 +61,6 @@
     (do
       (session/put! :user user)
       (resp/redirect "/welcome"))
-    (render "/login" user)))
+    (render "/login" (assoc user :msg "Failed to validate user credentials."))))
 
 
