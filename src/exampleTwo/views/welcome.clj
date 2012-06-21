@@ -26,12 +26,18 @@
    [:h2 "Known Users"]
    [:ul
     (for [user (user/get-users)]
-      [:li user])]))
+      [:li (form/form-to [:delete (str "/user/" user)]
+                         (form/label "user" user)
+                         (form/submit-button "delete"))])]))
 
 (defpage [:put "/register"] {:keys [username password]}
   (if (nil? (user/add-user username password))
     (render "/register" {:msg (format "Failed to add user %s. Already exists!" username)})
     (render "/register" {:msg (format "Added user %s" username)})))
+
+(defpage [:delete "/user/:id"] {:keys [id]}
+  (user/remove-user id)
+  (render "/register" {:msg (format "Deleted user %s" id)}))
 
 (defpage [:get "/login"] []
   (common/layout
@@ -53,4 +59,5 @@
   (when-let [user (user/valid? username password)]
     (session/put! :user user))
   (resp/redirect "/welcome"))
+
 
