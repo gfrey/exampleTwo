@@ -1,5 +1,6 @@
 (ns exampleTwo.db
   "A namespace containing the basic database adapter."
+  (:refer-clojure :exclude (read))
   (:require [stupiddb.core :as db]))
 
 (def db (atom nil))
