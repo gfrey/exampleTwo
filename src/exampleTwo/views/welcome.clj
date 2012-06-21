@@ -39,12 +39,12 @@
   (user/remove-user id)
   (render "/register" {:msg (format "Deleted user %s" id)}))
 
-(defpage [:get "/login"] []
+(defpage [:get "/login"] {:keys [username password]}
   (common/layout
    [:h1 "Login"]
    (form/form-to [:put "/login"]
-                 (form/text-field "username")
-                 (form/password-field "password")
+                 (form/text-field "username" username)
+                 (form/password-field "password" password)
                  (form/submit-button "Login"))))
 
 (defpage [:get "/logout"] []
@@ -55,9 +55,11 @@
        [:p (str "Bye " (:name user))]))
     (resp/redirect "/welcome")))
 
-(defpage [:put "/login"] {:keys [username password]}
-  (when-let [user (user/valid? username password)]
-    (session/put! :user user))
-  (resp/redirect "/welcome"))
+(defpage [:put "/login"] {:keys [username password] :as user}
+  (if-let [user (user/valid? username password)]
+    (do
+      (session/put! :user user)
+      (resp/redirect "/welcome"))
+    (render "/login" user)))
 
 
