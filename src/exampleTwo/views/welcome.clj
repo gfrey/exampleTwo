@@ -5,7 +5,7 @@
             [noir.content.getting-started]
             [noir.response :as resp]
             [noir.session :as session])
-  (:use [noir.core :only [defpage]]
+  (:use [noir.core :only [defpage render]]
         [hiccup.core :only [html]]))
 
 (defpage "/welcome" []
@@ -15,20 +15,23 @@
               (when (not (nil? user))
                 (:name user)))])))
 
-(defpage [:get "/register"] []
+(defpage [:get "/register"] {:keys [msg] :as input}
   (common/layout
    [:h1 "Register User"]
+   [:p (when (not (nil? msg)) msg)]
    (form/form-to [:put "/register"]
                  (form/text-field "username" "UserName")
                  (form/password-field "password")
                  (form/submit-button "submit"))
+   [:h2 "Known Users"]
    [:ul
     (for [user (user/get-users)]
       [:li user])]))
 
 (defpage [:put "/register"] {:keys [username password]}
-  (user/add-user username password)
-  (resp/redirect "/register"))
+  (if (nil? (user/add-user username password))
+    (render "/register" {:msg (format "Failed to add user %s. Already exists!" username)})
+    (render "/register" {:msg (format "Added user %s" username)})))
 
 (defpage [:get "/login"] []
   (common/layout
