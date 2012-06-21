@@ -9,9 +9,21 @@ lein deps
 lein run
 ```
 
+See [Leiningen](https://github.com/technomancy/leiningen) for the build tool.
+
+## Description
+
+This is just a toy website doing the following:
+
+ - starting a stupiddb instance
+ - allowing registration of new users (username & password)
+ - allowing validation of users
+ 
+It is simple and serves no purpose.
+
 ## License
 
-Copyright (C) 2011 FIXME
+Copyright (C) 2012 Gereon Frey
 
 Distributed under the Eclipse Public License, the same as Clojure.
 
