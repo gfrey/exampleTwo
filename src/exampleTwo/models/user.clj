@@ -23,19 +23,6 @@
   []
   (apply str (take 32 (repeatedly #(rand-nth valid-characters)))))
 
-(defn add-user
-  "Add a new user to the database. The password will be prepended by
-   an arbitrary salt."
-  [username password]
-  (let
-    [salt          (get-salt)
-     salted_hash   (get-hash salt password)]
-    (db/create {:type "user"
-                :id username
-                :name username
-                :salt salt
-                :password salted_hash})))
-
 (defn get-users
   []
   (-> (db/read "user")
@@ -45,6 +32,20 @@
 (defn get-user
   [username]
   (db/read "user" username))
+
+(defn add-user
+  "Add a new user to the database. The password will be prepended by
+   an arbitrary salt."
+  [username password]
+  (when (not-any? #{username} (get-users))
+    (let
+        [salt          (get-salt)
+         salted_hash   (get-hash salt password)]
+      (db/create {:type "user"
+                  :id username
+                  :name username
+                  :salt salt
+                  :password salted_hash}))))
 
 (defn valid?
   "Verify that the given user's password matches."
